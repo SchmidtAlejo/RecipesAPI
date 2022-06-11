@@ -19,4 +19,14 @@ router.put('/', async (req, res) =>{
   res.json(await controller.updateUserPassword(req.body));
 })
 
+router.post('/login',async (req, res)=>{
+  try {
+    const user = await controller.findByCredentials(req.body.email, req.body.password);
+    const token = controller.generateToken(user);
+    res.send({user, token});
+  } catch (error) {
+    res.status(401).send(error.message);
+  }
+});
+
 module.exports = router;
