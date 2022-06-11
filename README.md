@@ -12,4 +12,14 @@ Alcance:
 8. Ver listado de recetas guardadas en favorito.
 9. Eliminar receta del listado de favoritos.
 
-Endpoints:
+# Endpoints:
+
+Endopioint para las recetas: 
+
+api/recipes?ingridients=true (Devuelve los ingredientes)
+
+api/recipes?ingridientItem=[nombre del ingrediente] (Devuelve todas las recetas que se pueden hacer con el ingrediente ingresado)
+
+api/recipes?recipeId=[recipeId] (devuelve los detaslles de la receta ingresada)
+
+api/recipes?userId=[idUser] (devuelve las recetas favoritas del usuario)
