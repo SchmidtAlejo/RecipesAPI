@@ -22,7 +22,7 @@ router.put('/', async (req, res) =>{
 router.post('/login',async (req, res)=>{
   try {
     const user = await controller.findByCredentials(req.body.email, req.body.password);
-    const token = controller.generateToken(user);
+    const token = await controller.generateToken(user);
     res.send({user, token});
   } catch (error) {
     res.status(401).send(error.message);

@@ -51,18 +51,16 @@ async function findByCredentials(email, password){
     const user = await connectiondb.db(DATABASE)
                     .collection(USERS)
                     .findOne({email: email});
-    if(!user){
-        throw new Error('Credenciales no validas');
-    }
+
     const isMatch = await bcrypt.compare(password, user.password);
-    if(!isMatch){
-        throw new Error('Credenciales no validas');        
+    if(!user || !isMatch){
+        throw new Error('Credenciales no validas');
     }
     return user;
 }
 
 function generateToken(user){
-    const token = jwt.sign({_id:user._id}, 'clavesecreta', {expiresIn: '2h'} );
+    const token = jwt.sign({_id:user._id}, process.env.CLAVETOKEN , {expiresIn: '2h'} );
     return token;
 }
 
