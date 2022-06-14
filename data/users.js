@@ -33,8 +33,8 @@ async function addUser(user){
 
 async function updateUserPassword(user){
 
-    const query = {_id: new ObjectId(user._id)};
-    const passwordHash = await bcrypt.hash(user.password, 8);
+   const query = {_id: new ObjectId(user._id)};
+   const passwordHash = await bcrypt.hash(user.password, 8);
    const newValues = {$set:{
        password: passwordHash,
    }};
