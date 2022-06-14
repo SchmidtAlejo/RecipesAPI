@@ -16,4 +16,12 @@ async function updateUserPassword(user){
     return users.updateUserPassword(user);
 }
 
-module.exports = {getUsers, getUserById, addUser, updateUserPassword};
+async function findByCredentials(email,password){
+    return users.findByCredentials(email,password);
+}
+
+async function generateToken(user){
+    return users.generateToken(user);
+}
+
+module.exports = {getUsers, getUserById, addUser, updateUserPassword, findByCredentials, generateToken};

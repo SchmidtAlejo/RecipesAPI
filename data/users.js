@@ -3,6 +3,8 @@ const conn = require('./conn');
 const DATABASE = 'recipesAPI';
 const USERS = 'users';
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 
 async function getUsers(){
     const connectiondb = await conn.getConnection();
@@ -32,13 +34,11 @@ async function addUser(user){
 }
 
 async function updateUserPassword(user){
-
     const query = {_id: new ObjectId(user._id)};
     const passwordHash = await bcrypt.hash(user.password, 8);
-   const newValues = {$set:{
+    const newValues = {$set:{
        password: passwordHash,
-   }};
-
+    }};
     const connectiondb = await conn.getConnection();
     const result = await connectiondb.db(DATABASE)
                                         .collection(USERS)
@@ -46,4 +46,22 @@ async function updateUserPassword(user){
     return result;
 }
 
-module.exports = {getUsers, getUserById, addUser, updateUserPassword};
+async function findByCredentials(email, password){
+    const connectiondb = await conn.getConnection();
+    const user = await connectiondb.db(DATABASE)
+                    .collection(USERS)
+                    .findOne({email: email});
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if(!user || !isMatch){
+        throw new Error('Credenciales no validas');
+    }
+    return user;
+}
+
+function generateToken(user){
+    const token = jwt.sign({_id:user._id}, process.env.CLAVETOKEN , {expiresIn: '2h'} );
+    return token;
+}
+
+module.exports = {getUsers, getUserById, addUser, updateUserPassword, findByCredentials, generateToken};
