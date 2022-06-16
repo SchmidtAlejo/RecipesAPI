@@ -1,5 +1,11 @@
 # RecipesAPI
 
+Introducción: 
+
+En esta API es para una aplicación donde se podran buscar recetas de comidas en base a un ingrediente. 
+Los usuarios podrán darle "likes" y guardar sus recetas favoritas. Además, podrán ver las recetas con 
+mayor cantidad de likes.
+
 Alcance:
 
 1. Registración de usuario.
@@ -14,12 +20,59 @@ Alcance:
 
 # Endpoints:
 
-Endopioint para las recetas: 
+# Endpoints para los usuarios: 
 
-api/recipes?ingridients=true (Devuelve los ingredientes)
+GET: api/users (Devuelve todos los usuarios)
 
-api/recipes?ingridientItem=[nombre del ingrediente] (Devuelve todas las recetas que se pueden hacer con el ingrediente ingresado)
+GET: api/users/[id] (Devuelve el usuario del id ingresado)
 
-api/recipes?recipeId=[recipeId] (devuelve los detaslles de la receta ingresada)
+POST: api/users (Agrega un usario con los datos agregados al body)
+body:{
+    "email": [email],
+    "password": [password]
+}
 
-api/recipes?userId=[idUser] (devuelve las recetas favoritas del usuario)
+PUT: api/users (Agrega un usario con los datos agregados al body)
+body:{
+    "_id": [userId],
+    "password": [password]
+}
+
+POST: api/users/login (devuelve el token)
+body:{
+    "email": [email],
+    "password": [password]
+}
+
+POST: api/users/addFavorites (añade una receta a favoritos)
+body:{
+    "userId": [userId],
+    "recipeId": [recipeId]
+}
+
+POST: api/users/removeFavorites (devuelve el token)
+body:{
+    "userId": [userId],
+    "recipeId": [recipeId]
+}
+
+# Endpoints para las recetas: 
+
+GET: api/recipes?ingridients=true (Devuelve todos los ingredientes)
+
+GET: api/recipes?ingridient=[ingredientName] (Devuelve todas las recetas que se pueden hacer con el ingrediente ingresado)
+
+GET: api/recipes?recipeId=[recipeId] (devuelve los detaslles de la receta ingresada)
+
+GET: api/recipes?userId=[idUser] (devuelve las recetas favoritas del usuario)
+
+# Endpoints para las recetas likeadas:
+
+GET: api/recipes/likes (Devuelve todos las recetas que fueron likeadas en orden de mayor a menor likes)
+
+GET: api/recipes/likes/[recipeId] (Devuelve la cantidad de likes de una receta)
+
+POST: api/recipes/likes (Devuelve la cantidad de likes de una receta)
+{
+    "id": [recipeId]
+}

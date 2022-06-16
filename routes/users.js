@@ -29,4 +29,12 @@ router.post('/login',async (req, res)=>{
   }
 });
 
+router.post('/addFavorites',async (req, res)=>{
+  res.json(await controller.addRecipeFavorite(req.body.userId, req.body.recipeId));
+});
+
+router.post('/removeFavorites',async (req, res)=>{
+  res.json(await controller.removeRecipeFavorite(req.body.userId, req.body.recipeId));
+});
+
 module.exports = router;

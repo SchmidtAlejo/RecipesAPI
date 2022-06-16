@@ -6,8 +6,8 @@ router.get('/', async (req, res) => {
     if(req.query.ingridients){
         res.json(await controller.getIngridients());
     }
-    if(req.query.ingridientItem){
-        res.json(await controller.getRecipes(req.query.ingridientItem));
+    if(req.query.ingridient){
+        res.json(await controller.getRecipes(req.query.ingridient));
     }
     if(req.query.recipeId){
         res.json(await controller.getRecipeDetails(req.query.recipeId));
