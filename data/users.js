@@ -5,6 +5,13 @@ const USERS = 'users';
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+async function updateData(query, newValues){
+    const connectiondb = await conn.getConnection();
+    const result = await connectiondb.db(DATABASE)
+        .collection(USERS)
+        .updateOne(query, newValues);
+    return result;
+}
 
 async function getUsers() {
     const connectiondb = await conn.getConnection();
@@ -27,9 +34,13 @@ async function getUserById(id) {
 async function addUser(user) {
     const connectiondb = await conn.getConnection();
     user.password = await bcrypt.hash(user.password, 8);
+    const newUser = {
+        ...user, 
+        favorites: [],
+    }
     const result = await connectiondb.db(DATABASE)
         .collection(USERS)
-        .insertOne(user);
+        .insertOne(newUser);
     return result;
 }
 
@@ -41,11 +52,7 @@ async function updateUserPassword(user) {
             password: passwordHash,
         }
     };
-    const connectiondb = await conn.getConnection();
-    const result = await connectiondb.db(DATABASE)
-        .collection(USERS)
-        .updateOne(query, newValues);
-    return result;
+    return await updateData(query, newValues);
 }
 
 async function findByCredentials(email, password) {
@@ -66,4 +73,31 @@ function generateToken(user) {
     return token;
 }
 
-module.exports = { getUsers, getUserById, addUser, updateUserPassword, findByCredentials, generateToken };
+async function addRecipeFavorite(userId, recipeId){
+    const user = await getUserById(userId);
+    const newFavorites = user[0].favorites;
+    newFavorites.push(recipeId);
+    const query = { _id: new ObjectId(userId) };
+    const newValues = {
+        $set: {
+            favorites: newFavorites,
+        }
+    };
+    return await updateData(query, newValues);
+}
+
+async function removeRecipeFavorite(userId, recipeId){
+    const user = await getUserById(userId);
+    let newFavorites = user[0].favorites;
+    const indexRemove = newFavorites.indexOf(recipeId);
+    newFavorites.splice(indexRemove, 1);
+    const query = { _id: new ObjectId(userId) };
+    const newValues = {
+        $set: {
+            favorites: newFavorites,
+        }
+    };
+    return await updateData(query, newValues);
+}
+
+module.exports = { getUsers, getUserById, addUser, updateUserPassword, findByCredentials, generateToken, addRecipeFavorite, removeRecipeFavorite };

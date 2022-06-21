@@ -8,7 +8,7 @@ async function getIngridients() {
     const url = `${API_HOST}/list.php?i=list`;
     const response = await fetch(url);
     const result = await response.json();
-    return result;
+    return result.meals;
   } catch (error) {
     throw new Error("Solicitud fallida");
   }
@@ -46,7 +46,6 @@ async function getFavoritesRecipes(idUser) {
       }
     }
     const user = await users.getUserById(idUser);
-    const url = `${API_HOST}/lookup.php?i=`;
     const listaDeRecetas = [];
     const search= async()=>{
       await asyncForEach(user[0].favorites , async (idReceta) =>{;

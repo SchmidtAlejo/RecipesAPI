@@ -24,4 +24,12 @@ async function generateToken(user){
     return users.generateToken(user);
 }
 
-module.exports = {getUsers, getUserById, addUser, updateUserPassword, findByCredentials, generateToken};
+async function addRecipeFavorite(userId, recipeId){
+    return users.addRecipeFavorite(userId, recipeId);
+}
+
+async function removeRecipeFavorite(userId, recipeId){
+    return users.removeRecipeFavorite(userId, recipeId);
+}
+
+module.exports = {getUsers, getUserById, addUser, updateUserPassword, findByCredentials, generateToken, addRecipeFavorite, removeRecipeFavorite };
