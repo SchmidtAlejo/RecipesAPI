@@ -11,7 +11,12 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  res.json(await controller.addLike(req.body.id));
+  try{
+   res.json(await controller.addLike(req.body.recipeId, req.body.userId));
+  }
+  catch (error){
+    res.status(401).send(error.message);
+  }
 });
 
 module.exports = router;

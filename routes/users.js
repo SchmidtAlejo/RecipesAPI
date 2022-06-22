@@ -12,7 +12,12 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) =>{
+  try{
   res.json(await controller.addUser(req.body));
+  }
+  catch (error) {
+    res.status(401).send(error.message);
+  }
 })
 
 router.put('/', async (req, res) =>{
@@ -29,11 +34,16 @@ router.post('/login',async (req, res)=>{
   }
 });
 
-router.post('/addFavorites',async (req, res)=>{
-  res.json(await controller.addRecipeFavorite(req.body.userId, req.body.recipeId));
+router.put('/addFavorites',async (req, res)=>{
+  try{
+    res.json(await controller.addRecipeFavorite(req.body.userId, req.body.recipeId));
+  }
+  catch ( error) {
+    res.status(401).send(error.message);
+  }
 });
 
-router.post('/removeFavorites',async (req, res)=>{
+router.put('/removeFavorites',async (req, res)=>{
   res.json(await controller.removeRecipeFavorite(req.body.userId, req.body.recipeId));
 });
 

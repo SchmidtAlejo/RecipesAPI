@@ -6,7 +6,7 @@ En esta API es para una aplicación donde se podran buscar recetas de comidas en
 Los usuarios podrán darle "likes" y guardar sus recetas favoritas. Además, podrán ver las recetas con 
 mayor cantidad de likes.
 
-Alcance:
+# Alcance:
 
 1. Registración de usuario.
 2. Inicio de sesión de usuario.
@@ -18,7 +18,16 @@ Alcance:
 8. Ver listado de recetas guardadas en favorito.
 9. Eliminar receta del listado de favoritos.
 
-# Endpoints:
+# Requerimientos:
+
+1. Clonar el repositorio.
+2. Ejecutar por consola el comando "npm install"
+3. Agregar el archivo .env con sus respectivos datos.
+4. Ejecutar el endpoint "POST: /" para generar datos de prueba. 
+
+# Endpoint para cargar datos de prueba:
+
+POST: /
 
 # Endpoints para los usuarios: 
 
@@ -26,31 +35,31 @@ GET: api/users (Devuelve todos los usuarios)
 
 GET: api/users/[id] (Devuelve el usuario del id ingresado)
 
-POST: api/users (Agrega un usario con los datos agregados al body)
-body:{
-    "email": [email],
-    "password": [password]
-}
-
 PUT: api/users (Agrega un usario con los datos agregados al body)
 body:{
     "_id": [userId],
     "password": [password]
 }
 
-POST: api/users/login (devuelve el token)
+POST: api/users (Agrega un usario con los datos agregados al body)
 body:{
     "email": [email],
     "password": [password]
 }
 
-POST: api/users/addFavorites (añade una receta a favoritos)
+POST: api/users/login (devuelve el usuario y el token)
+body:{
+    "email": [email],
+    "password": [password]
+}
+
+PUT: api/users/addFavorites (añade una receta a favoritos)
 body:{
     "userId": [userId],
     "recipeId": [recipeId]
 }
 
-POST: api/users/removeFavorites (devuelve el token)
+PUT: api/users/removeFavorites (devuelve el token)
 body:{
     "userId": [userId],
     "recipeId": [recipeId]
@@ -72,7 +81,8 @@ GET: api/recipes/likes (Devuelve todos las recetas que fueron likeadas en orden 
 
 GET: api/recipes/likes/[recipeId] (Devuelve la cantidad de likes de una receta)
 
-POST: api/recipes/likes (Devuelve la cantidad de likes de una receta)
+POST: api/recipes/likes (Agrega un like a la receta que se pasa por el body)
 {
-    "id": [recipeId]
+    "recipeId": [recipeId]
+    "userId": [userId]
 }

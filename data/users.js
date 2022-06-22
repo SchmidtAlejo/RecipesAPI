@@ -33,6 +33,13 @@ async function getUserById(id) {
 
 async function addUser(user) {
     const connectiondb = await conn.getConnection();
+    const users = await connectiondb.db(DATABASE)
+        .collection(USERS)
+        .find({email: user.email })
+        .toArray();
+    if(users.length>0){
+        throw new Error("El email ingresado ya esta en uso")
+    }
     user.password = await bcrypt.hash(user.password, 8);
     const newUser = {
         ...user, 
@@ -75,6 +82,9 @@ function generateToken(user) {
 
 async function addRecipeFavorite(userId, recipeId){
     const user = await getUserById(userId);
+    if(user[0].favorites.find((recipe)=>recipe===recipeId)){
+        throw new Error("La receta ya esta en favoritos");
+    }
     const newFavorites = user[0].favorites;
     newFavorites.push(recipeId);
     const query = { _id: new ObjectId(userId) };

@@ -23,36 +23,38 @@ async function getLikeByRecipeId(id) {
   return result;
 }
 
-async function addLike(id) {
+async function addLike(recipeId, userId) {
   let result;
   let recipeLike;
   const connectiondb = await conn.getConnection();
+  recipeLike = await getLikeByRecipeId(recipeId);
 
-  try {
-    recipeLike = await getLikeByRecipeId(id);
-  } catch (error) {
-    throw new Error('Esta receta no tiene likes todavia.' + error);
-  } finally {
-    if (recipeLike === undefined || recipeLike.length == 0) {
-      const newRecipeLike = {
-        recipe_id: id,
-        likes: 1,
+  if (recipeLike === undefined || recipeLike.length == 0) {
+    const newRecipeLike = {
+      recipe_id: recipeId,
+      users: [userId],
+      likes: 1,
+    }
+    result = await createRecipeLikes(newRecipeLike);
+  } else {
+    if(recipeLike[0].users.find((user)=>user===userId)){
+      throw new Error("El usuario ya le dio like a esta receta")
+    }
+    const newUserList = recipeLike[0].users;
+    newUserList.push(userId);
+    const query = { _id: new ObjectId(recipeLike[0]._id) };
+    const newValues = {
+      $set: {
+        likes: recipeLike[0].likes + 1,
+        users: newUserList,
       }
-      result = await createRecipeLikes(newRecipeLike);
-    } else {
-      const query = { _id: new ObjectId(recipeLike[0]._id) };
-      const newValues = {
-        $set: {
-          likes: recipeLike[0].likes + 1,
-        }
-      };
-      result = await connectiondb.db(DATABASE)
-        .collection(LIKES)
-        .updateOne(query, newValues);
+    };
+    result = await connectiondb.db(DATABASE)
+      .collection(LIKES)
+      .updateOne(query, newValues);
     }
     return result;
   }
-}
 
 async function createRecipeLikes(newRecipe) {
   const connectiondb = await conn.getConnection();
@@ -66,5 +68,6 @@ async function createRecipeLikes(newRecipe) {
 module.exports = {
   addLike,
   getLikes,
-  getLikeByRecipeId
+  getLikeByRecipeId,
+  createRecipeLikes
 };
