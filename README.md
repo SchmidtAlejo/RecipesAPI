@@ -35,12 +35,6 @@ GET: api/users (Devuelve todos los usuarios)
 
 GET: api/users/[id] (Devuelve el usuario del id ingresado)
 
-PUT: api/users (Agrega un usario con los datos agregados al body)
-body:{
-    "_id": [userId],
-    "password": [password]
-}
-
 POST: api/users (Agrega un usario con los datos agregados al body)
 body:{
     "email": [email],
@@ -50,6 +44,12 @@ body:{
 POST: api/users/login (devuelve el usuario y el token)
 body:{
     "email": [email],
+    "password": [password]
+}
+
+PUT: api/users (Agrega un usario con los datos agregados al body)
+body:{
+    "_id": [userId],
     "password": [password]
 }
 
