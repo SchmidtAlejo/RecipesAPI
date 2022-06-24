@@ -1,7 +1,0 @@
-use('recipesAPI');
-
-db.users.drop();
-db.users.insertMany([
-    { password: 'password', email: 'demo@demo.com', favorites: [53061, 53062, 53063]},
-    { password: 'password2', email: 'demo2@demo.com', favorites: []},
-])
