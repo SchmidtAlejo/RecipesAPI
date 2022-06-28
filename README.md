@@ -47,7 +47,7 @@ body:{
     "password": [password]
 }
 
-PUT: api/users (Agrega un usario con los datos agregados al body)
+PUT: api/users (Cambia la contraseña del usuario)
 body:{
     "_id": [userId],
     "password": [password]
